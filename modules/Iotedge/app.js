@@ -114,6 +114,19 @@ Client.fromEnvironment(Transport, function (err, client) {
 
 function sendMessage(client, result) {
 
+  // Helper function to print results in the console
+  function printResultFor(op) {
+    return function printResult(err, res) {
+      if (err) {
+        console.log(op + ' error: ' + err.toString());
+      }
+      if (res) {
+        console.log(op + ' status: ' + res.constructor.name);
+      }
+    };
+  }
+
+
   let module_name = ''
   // DCOST default = 0
   let DCOST = 0
