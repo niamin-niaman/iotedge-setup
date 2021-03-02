@@ -4,6 +4,10 @@ var Transport = require('azure-iot-device-mqtt').Mqtt;
 var Client = require('azure-iot-device').ModuleClient;
 var Message = require('azure-iot-device').Message;
 
+let A
+let B
+// let NEW_DESIRED_PROP
+
 Client.fromEnvironment(Transport, function (err, client) {
   if (err) {
     throw err;
@@ -29,15 +33,18 @@ Client.fromEnvironment(Transport, function (err, client) {
 
           if (desired) {
 
-            if (desired.timeout) {
-              timeout = desired.timeout
-              console.log('timeoute has set : ', timeout);
+            if (desired.A) {
+              A = desired.A
+              console.log('A has set : ', A);
             }
-            if (desired.pullingInterval) {
-              pullingInterval = desired.pullingInterval
-              console.log("pullingInterval has set : ", pullingInterval);
+            if (desired.B) {
+              B = desired.B
+              console.log("B has set : ", B);
             }
-            // add desired.pullingInterval
+            // if (desired.NEW_DESIRED_PROP) {
+            //   NEW_DESIRED_PROP = desired.NEW_DESIRED_PROP
+            //   console.log("NEW_DESIRED_PROP has set : ", NEW_DESIRED_PROP);
+            // }
 
             console.log('desired has set');
 
@@ -45,7 +52,15 @@ Client.fromEnvironment(Transport, function (err, client) {
             try {
 
               // exact data from desired and report properties
-              let path = (({ timeout, pullingInterval }) => ({ timeout, pullingInterval }))(desired)
+              let path = (({
+                A,
+                B,
+                // NEW_DESIRED_PROP,
+              }) => ({
+                A,
+                B,
+                // NEW_DESIRED_PROP,
+              }))(desired)
               console.log("------- REPORT PROPERTIES ----------");
               console.log(path);
               console.log("-------------------------------------");
@@ -58,8 +73,8 @@ Client.fromEnvironment(Transport, function (err, client) {
               // CODE HERE AFTER GET DEVICE TWIN
 
             } catch (error) {
-              
-              console.log('Error: ',error.message);
+
+              console.log('Error: ', error.message);
 
             }
 
@@ -68,10 +83,12 @@ Client.fromEnvironment(Transport, function (err, client) {
           else {
 
             console.log('no desired value');
-            if (!desired.hasOwnProperty('timeout'))
-              console.log('desire property : timout not fond');
-            if (!desired.hasOwnProperty('pullingInterval'))
-              console.log('desire property : pullingInterval not fond');
+            if (!desired.hasOwnProperty('A'))
+              console.log('desire property : A not fond');
+            if (!desired.hasOwnProperty('B'))
+              console.log('desire property : B not fond');
+            // if (!desired.hasOwnProperty('NEW_DESIRED_PROP'))
+              // console.log('desire property : NEW_DESIRED_PROP not fond');
           }
 
         });
