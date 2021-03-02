@@ -88,7 +88,7 @@ Client.fromEnvironment(Transport, function (err, client) {
             if (!desired.hasOwnProperty('B'))
               console.log('desire property : B not fond');
             // if (!desired.hasOwnProperty('NEW_DESIRED_PROP'))
-              // console.log('desire property : NEW_DESIRED_PROP not fond');
+            // console.log('desire property : NEW_DESIRED_PROP not fond');
           }
 
         });
@@ -112,3 +112,32 @@ Client.fromEnvironment(Transport, function (err, client) {
   }
 });
 
+function sendMessage(client, result) {
+
+  let module_name = ''
+  // DCOST default = 0
+  let DCOST = 0
+
+  // create message object that contain result ,send to iothub.
+  let message = new Message(JSON.stringify(
+    // result
+    // reformat
+    // attach DCOST to message
+    { 'DCOST': DCOST, 'data': result, 'publishTimestamp': new Date() }
+  ))
+
+  message.publishTimestamp = new Date().toJSON()
+  message.contentEncoding = "UTF-8";
+  message.contentType = "application/json";
+  message.properties.add('module', module_name)
+
+  console.log('------ MESSAGE --------');
+  console.log(message);
+  // console.log(JSON.stringify(message));
+  console.log('-------------- --------');
+
+  // send to output1
+  client.sendOutputEvent('output1', message, printResultFor('message sent'));
+
+
+}
